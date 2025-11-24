@@ -1,39 +1,58 @@
 package CacheImpl;
 
 import Interfaces.ICache;
+import java.util.*;
 
 public class LRUCache implements ICache {
+
+    private final int capacity;
+    private final LinkedHashMap<String, Integer> cache;
+
+
+    public  LRUCache(int capacity){
+        this.capacity = capacity;
+
+        this.cache = new LinkedHashMap<>(capacity, 0,75f, true){
+            protected boolean removeEldestEntry(Map.Entry<String, Integer> eldest) {
+                return size()> LRUCache.this.capacity;
+            }
+        };
+
+    }
+
+
     @Override
     public void put(String key, int value){
-
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'put' ");
+        cache.put(key,value);
     }
+
+
     @Override
     public int get(String key){
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get' ");
+        return cache.remove(key);
+    }
 
 
-    }
     @Override
-    public int remove(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove' ");
+    public void remove(String key) {
+        cache.remove(key);
     }
+
+
     @Override
-    public int clear(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear' ");
+    public void clear() {
+        cache.clear();
     }
+
+
     @Override
-    public int getSize(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSize' ");
+    public int getSize() {
+        return cache.size();
     }
+
+
     @Override
-    public int containsKey(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'containsKey' ");
+    public boolean containsKey(String key) {
+        return cache.containsKey(key);
     }
 }

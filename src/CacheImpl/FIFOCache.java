@@ -3,52 +3,59 @@ package CacheImpl;
 import Interfaces.ICache;
 
 import Interfaces.ICache;
+import java.util.*;
 
 public class FIFOCache implements ICache {
+    private final int capacity;
+    private final Map<String,Integer>storage =  new HashMap<>();
+    private final Queue<String> order = new LinkedList<>();
+
+    public FIFOCache(int capacity){
+        this.capacity = capacity;
+    }
 
     @Override
     public void put(String key, int value){
 
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'put' ");
+        if(storage.containsKey(key)){
+            storage.put(key,value);
+            return;
+        }
+
+        if(storage.size() >= capacity){
+            String oldestKey = order.poll();
+            storage.remove(oldestKey);
+        }
     }
     @Override
     public int get(String key){
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get' ");
-
-
+        return storage.getOrDefault(key, -1);
     }
+
+
     @Override
     public void remove(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove' ");
+        if(storage.containsKey(key)){
+            storage.remove(key);
+            order.remove(key);
+        }
     }
 
     @Override
     public void clear() {
+        storage.clear();
+        order.clear();
 
     }
 
     @Override
     public int getSize() {
-        return 0;
+        return storage.size();
     }
 
     @Override
-    public int clear(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear' ");
-    }
-    @Override
-    public int getSize(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSize' ");
-    }
-    @Override
     public boolean containsKey(String key) {
-        //TODO Auto_generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'containsKey' ");
+        return storage.containsKey(key);
     }
 
 }
