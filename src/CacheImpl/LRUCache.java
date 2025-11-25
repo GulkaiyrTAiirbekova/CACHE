@@ -7,6 +7,9 @@ import java.util.Map;
 
 public class LRUCache implements ICache {
 
+    int capacity;
+    String name;
+
     private final int capacity;
     private final LinkedHashMap<String, Integer> cache;
 
