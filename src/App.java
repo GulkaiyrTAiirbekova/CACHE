@@ -1,13 +1,32 @@
-import CacheImpl.FIFOCache;
+import CacheImpl.CacheTypeEnum;
 import Interfaces.CacheFactory;
 import Interfaces.ICache;
-import CacheImpl.CacheTypeEnum;
 
 
 public class App {
     public static void main(String [] args) {
-        runCacheTests();
+        testFactoryWithFIFO();   // Run the FIFO factory test
+        runCacheTests();   // Run the general cache tests
     }
+
+    // Test Factory specifically with FIFO cache
+    private static void testFactoryWithFIFO() {
+        CacheFactory factory = new CacheFactory();
+        System.out.println("=== Factory Test: FIFO ===");
+
+        ICache fifo = factory.createCacheInstance(CacheTypeEnum.FIFO, 2);
+
+        fifo.put("key1", 100);
+        fifo.put("key2", 200);
+        fifo.put("key3", 300); // Should evict "key1"
+
+        System.out.println(fifo.get("key1")); // -1
+        System.out.println(fifo.get("key2")); // 200
+        System.out.println(fifo.get("key3")); // 300
+        System.out.println("FIFO factory test completed.\n");
+    }
+
+
     private static void runCacheTests(){
 
         CacheFactory factory = new CacheFactory();

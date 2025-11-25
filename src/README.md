@@ -46,12 +46,12 @@ A CacheFactory class allows creating cache instances dynamically:
 
 CacheFactory factory = new CacheFactory();
 
-ICache fifo = factory.createCacheInstance(CacheTypeEnum.FIFO, 3);
-ICache lru  = factory.createCacheInstance(CacheTypeEnum.LRU, 3);
-ICache lfu  = factory.createCacheInstance(CacheTypeEnum.LFU, 3); // optional
+ICache fifo = factory.createCacheInstance(CacheImpl.CacheTypeEnum.FIFO, 3);
+ICache lru  = factory.createCacheInstance(CacheImpl.CacheTypeEnum.LRU, 3);
+ICache lfu  = factory.createCacheInstance(CacheImpl.CacheTypeEnum.LFU, 3); // optional
 
 ### Example Usage
-ICache cache = factory.createCacheInstance(CacheTypeEnum.FIFO, 2);
+ICache cache = factory.createCacheInstance(CacheImpl.CacheTypeEnum.FIFO, 2);
 
 cache.put("a", 1);
 cache.put("b", 2);
