@@ -5,7 +5,10 @@ import CacheImpl.CacheTypeEnum;
 
 
 public class App {
-    public static void main(String [] args){
+    public static void main(String [] args) {
+        runCacheTests();
+    }
+    private static void runCacheTests(){
 
         CacheFactory factory = new CacheFactory();
 
