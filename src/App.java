@@ -1,15 +1,38 @@
+import BuilderExample.Animal;
+import BuilderExample.AnimalBuilder;
 import CacheImpl.CacheTypeEnum;
 import CacheImpl.LRUCacheBuilder;
 import Interfaces.CacheFactory;
 import Interfaces.ICache;
 
+
 public class App {
     public static void main(String[] args) {
         // Uncomment any test you want to run
 
-        //testFactoryWithFIFO();
-        //runCacheTests();
+        testFactoryWithFIFO();
+        runCacheTests();
+        testAnimal();
         testLRUCacheBuilder();   // <-- Running Builder Test
+    }
+
+
+    private static void testAnimal() {
+        AnimalBuilder giraffeBuilder = new AnimalBuilder();//Animal.Builder builder = new Animal.Builder();
+        Animal giraffe = giraffeBuilder.setAge(1).setHeight(150).setWeight(10).build();
+
+        AnimalBuilder lionBuilder = new AnimalBuilder();
+        Animal lion = lionBuilder.setAge(2).setHeight(10).setWeight(12).setName("Mufasa").build();
+
+        AnimalBuilder tigerBuilder = new AnimalBuilder();//so properties won't copy previous one
+        Animal tiger = tigerBuilder.setAge(3).setHeight(11).setWeight(25).setName("Ragnar").build();
+
+
+        //Prints animals
+
+        System.out.println(giraffe);
+        System.out.println(lion);
+        System.out.println(tiger);
     }
 
     // -------------------------
