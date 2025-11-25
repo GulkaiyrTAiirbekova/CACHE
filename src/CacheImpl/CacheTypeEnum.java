@@ -1,7 +1,9 @@
 package CacheImpl;
 
-public class CacheTypeEnum {
-    FIFO,
+import CacheImpl.CacheTypeEnum;
+
+public enum CacheTypeEnum {
     LRU,
     LFU,
+    FIFO
 }

@@ -2,6 +2,8 @@ package CacheImpl;
 
 import Interfaces.ICache;
 import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class LRUCache implements ICache {
 
@@ -12,7 +14,9 @@ public class LRUCache implements ICache {
     public  LRUCache(int capacity){
         this.capacity = capacity;
 
-        this.cache = new LinkedHashMap<>(capacity, 0,75f, true){
+        this.cache = new LinkedHashMap<>(capacity, 0.75f, true){
+
+            @Override
             protected boolean removeEldestEntry(Map.Entry<String, Integer> eldest) {
                 return size()> LRUCache.this.capacity;
             }
@@ -29,7 +33,7 @@ public class LRUCache implements ICache {
 
     @Override
     public int get(String key){
-        return cache.remove(key);
+        return cache.getOrDefault(key,-1);
     }
 
 
