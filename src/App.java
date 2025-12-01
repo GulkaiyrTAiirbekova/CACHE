@@ -1,13 +1,6 @@
-import BuilderExample.Animal;
-import BuilderExample.AnimalBuilder;
-import CacheImpl.CacheTypeEnum;
-import CacheImpl.LRUCacheBuilder;
-import FastFoodRestaurant.FastFoodRestaurant;
-import FastFoodRestaurant.FastFoodRestaurantBuilder;
-import Interfaces.CacheFactory;
-import Interfaces.ICache;
-
+/*
 public class App {
+
 
     public static void main(String[] args) {
         // Cache tests
@@ -137,4 +130,126 @@ public class App {
         System.out.println(f2);
     }
 }
+
+ */
+
+
+import CacheImpl.*;
+import Interfaces.ICache;
+
+// To make code cleaner
+public class App {
+    public static void main(String[] args) throws Exception {
+        // testLFUwithFactory();
+        // testFIFOwithFactory();
+        // testLegacyCacheAdapter();
+        testCacheTimeMeasureDecorator();
+        testProxyCache();
+        testCacheFacade();
+    }
+
+    private static void testCacheTimeMeasureDecorator() {
+        ICache lfuCache = new CacheFactory().createCacheInstance(CacheTypeEnum.LFU, 10);
+        ICache decorator = new CacheTimeMeasureDecorator(lfuCache);
+
+        decorator.put("item1", 1);
+        decorator.put("item2", 2);
+
+        decorator.get("item1");
+        decorator.get("item3"); // non-existent key
+    }
+
+    private static void testLegacyCacheAdapter() {
+        ICache legacyCache = new LegacyCacheAdapter(4);
+
+        legacyCache.put("item1", 1);
+        legacyCache.put("item2", 2);
+        legacyCache.put("item3", 3);
+        legacyCache.put("item4", 4);
+
+        System.out.println("Size after 4 inserts: " + legacyCache.getSize());
+        legacyCache.put("item5", 5); // should print "Cache is full"
+        System.out.println("Size after trying 5th insert: " + legacyCache.getSize());
+
+        legacyCache.remove("item2");
+        System.out.println("Size after removing item2: " + legacyCache.getSize());
+
+        legacyCache.put("item6", 6);
+        System.out.println("Size after inserting item6: " + legacyCache.getSize());
+    }
+
+    private static void testLFUwithFactory() {
+        ICache lfuCache = new CacheFactory().createCacheInstance(CacheTypeEnum.LFU, 10);
+
+        lfuCache.put("key1", 1);
+        lfuCache.put("key2", 2);
+        System.out.println("Size after 2 inserts: " + lfuCache.getSize());
+
+        lfuCache.remove("key1");
+        System.out.println("Size after removing key1: " + lfuCache.getSize());
+    }
+
+    private static void testFIFOwithFactory() {
+        ICache fifoCache = new CacheFactory().createCacheInstance(CacheTypeEnum.FIFO, 9);
+
+        fifoCache.put("key1", 1);
+        fifoCache.put("key2", 2);
+
+        System.out.println("Size after 2 inserts: " + fifoCache.getSize());
+        System.out.println("Value of key2: " + fifoCache.get("key2"));
+
+        fifoCache.remove("key1");
+        System.out.println("Size after removing key1: " + fifoCache.getSize());
+    }
+
+// -------------------------
+// Proxy Cache Test
+// -------------------------
+
+
+
+    private static void testProxyCache(){
+        System.out.println("==== Proxy Cache Tes===");
+        ICache lru = new CacheFactory().createCacheInstance(CacheTypeEnum.LFU,2);
+        ICache proxyCache = new CacheProxy(lru);
+
+        proxyCache.put("x", 100);
+        System.out.println("Get x: " + proxyCache.get("x"));
+
+        proxyCache.remove("x");
+        System.out.println("Get x after remove: " +proxyCache.get("x"));
+
+        System.out.println("Proxy Cache test done. /n");
+
+
+
+    }
+    // -------------------------
+    //  Facade  Cache Test
+    // -------------------------
+
+    private static void testCacheFacade(){
+        System.out.println("==== Facade Cache Tes===");
+
+        CacheFacade facade = new CacheFacade(2);
+
+        facade.put("a", 1);
+        facade.put("b", 2);
+
+        System.out.println("Get a: " + facade.get("a")); //1
+        System.out.println("Get b: " + facade.get("b")); //2
+
+        facade.remove("b");
+        System.out.println("Total size after removing b: " +facade.totalSize());
+
+        System.out.println("Facade Cache test done. /n");
+
+
+
+
+
+    }
+
+}
+
 
