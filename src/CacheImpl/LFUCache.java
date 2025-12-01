@@ -7,6 +7,7 @@ public class LFUCache implements ICache {
 
     private final int capacity;
     private int minFreq;
+    private String serverName; // Added for Builder compatibility
 
     private final Map<String, Integer> valueMap = new HashMap<>();
     private final Map<String, Integer> freqMap = new HashMap<>();
@@ -17,6 +18,20 @@ public class LFUCache implements ICache {
         this.minFreq = 1;
     }
 
+    // -------------------------
+    // Server name (Builder API)
+    // -------------------------
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    // -------------------------
+    // Core LFU Logic
+    // -------------------------
     @Override
     public void put(String key, int value) {
         if (capacity == 0) return;
@@ -52,6 +67,7 @@ public class LFUCache implements ICache {
         int freq = freqMap.get(key);
         freqList.get(freq).remove(key);
 
+        // If this was the last key with this freq → increment minFreq
         if (freq == minFreq && freqList.get(freq).isEmpty()) {
             minFreq++;
         }
@@ -99,3 +115,4 @@ public class LFUCache implements ICache {
         return valueMap.containsKey(key);
     }
 }
+
